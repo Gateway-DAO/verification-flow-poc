@@ -20,7 +20,7 @@ export default function Home() {
 
   // State
   const [isLoading, setIsLoading] = useState(false);
-  const [proof, setProof] = useState<object | null>(null);
+  const [proof, setProof] = useState<{ data: any } | null>(null);
 
   const createRequest = async () => {
     setIsLoading(true);
