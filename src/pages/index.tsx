@@ -21,9 +21,11 @@ export default function Home() {
   // State
   const [isLoading, setIsLoading] = useState(false);
   const [proof, setProof] = useState<{ data: any } | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const createRequest = async () => {
     setIsLoading(true);
+    setError(null);
     try {
       const response = await fetch("/api/create-request", {
         method: "POST",
@@ -49,7 +51,13 @@ export default function Home() {
         }),
       });
 
-      const { message } = await response.json();
+      const { message, error } = await response.json();
+
+      if (error) {
+        setError(`Error getting nonce: ${error}`);
+        setIsLoading(false);
+        return;
+      }
 
       const signature = await signMessageAsync({ message });
 
@@ -61,7 +69,13 @@ export default function Home() {
         }),
       });
 
-      const { proof } = await response2.json();
+      const { proof, error: error2 } = await response2.json();
+
+      if (error2) {
+        setError(`Error creating proof: ${error2}`);
+        setIsLoading(false);
+        return;
+      }
 
       setProof(proof);
       setIsLoading(false);
@@ -109,6 +123,11 @@ export default function Home() {
       {proof && !proof?.data?.PDAs?.length && (
         <Stack>
           <p>Requested PDAs not found, go to X link to get them</p>
+        </Stack>
+      )}
+      {error && (
+        <Stack>
+          <p>{error}</p>
         </Stack>
       )}
     </Stack>
