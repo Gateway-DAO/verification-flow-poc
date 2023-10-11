@@ -6,18 +6,23 @@ export default async function handler(
 ) {
   const URL = "https://develop.protocol.mygateway.xyz/v1/graphql";
   const dataRequestTemplateId = process.env.TEMPLATE_ID;
+  const orgGatewayId = process.env.ORG_GATEWAY_ID;
 
   const { body } = req;
 
   const data = {
     query: `
-    mutation($wallet: String!, $dataRequestTemplateId: String!) {
+    mutation($wallet: String!, $dataRequestTemplateId: String!, $orgGatewayId: String!) {
         createDataRequest(input: {
             dataRequestTemplateId: $dataRequestTemplateId,
             owner: {
                 type: EVM,
                 value: $wallet
             },
+            organization: {
+              type: GATEWAY_ID
+              value: $orgGatewayId
+            }
             dataUse: "Because I can"
         }) {
             arweaveUrl,
@@ -28,6 +33,7 @@ export default async function handler(
     variables: {
       wallet: JSON.parse(body).address,
       dataRequestTemplateId,
+      orgGatewayId,
     },
   };
 
