@@ -4,7 +4,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const URL = "https://develop.protocol.mygateway.xyz/v1/graphql";
   const dataRequestTemplateId = process.env.TEMPLATE_ID;
   const orgGatewayId = process.env.ORG_GATEWAY_ID;
 
@@ -37,7 +36,7 @@ export default async function handler(
     },
   };
 
-  const api = await fetch(URL, {
+  const api = await fetch(process.env.API_URL as string, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
