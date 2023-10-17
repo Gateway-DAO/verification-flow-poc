@@ -30,6 +30,7 @@ export default async function handler(
   const returnData = await api.json();
 
   if (returnData.errors) {
+    console.log(JSON.stringify(returnData.errors, null, 4));
     return res.status(500).json({ error: returnData.errors[0].message });
   }
 

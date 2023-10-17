@@ -28,6 +28,7 @@ export default async function handler(
     headers: {
       "Content-Type": "application/json",
       "x-api-key": process.env.API_KEY as string,
+      Authorization: process.env.BEARER as string,
     },
     body: JSON.stringify(data),
   });
@@ -35,7 +36,7 @@ export default async function handler(
   const returnData = await api.json();
 
   if (returnData.errors) {
-    console.log(returnData.errors);
+    console.log(JSON.stringify(returnData.errors, null, 4));
     return res.status(500).json({ error: returnData.errors[0].message });
   }
 
@@ -100,7 +101,7 @@ export default async function handler(
   const returnData2 = await api2.json();
 
   if (returnData2.errors) {
-    console.log(returnData2.errors);
+    console.log(JSON.stringify(returnData2.errors, null, 4));
     return res.status(500).json({ error: returnData2.errors[0].message });
   }
 

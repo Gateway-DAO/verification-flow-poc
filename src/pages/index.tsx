@@ -1,4 +1,13 @@
-import { Button, Stack } from "@mui/material";
+import Logo from "@/components/logo/logo";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import {
   useAccount,
@@ -18,6 +27,8 @@ export default function Home() {
   const { disconnect } = useDisconnect();
   const { signMessageAsync } = useSignMessage();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   // State
   const [isLoading, setIsLoading] = useState(false);
   const [proof, setProof] = useState<{ data: any } | null>(null);
@@ -34,7 +45,29 @@ export default function Home() {
         }),
       });
 
-      const { id } = await response.json();
+      const { id, error } = await response.json();
+
+      if (error) {
+        if (
+          error === "Cannot convert object to primitive value" ||
+          error === `User ${address} not found`
+        ) {
+          setError("No matching PDAs found for this request");
+          enqueueSnackbar("No matching PDAs found for this request", {
+            variant: "warning",
+          });
+          setIsLoading(false);
+          return;
+        }
+
+        setError(`Error creating request: ${error}`);
+        enqueueSnackbar(`Error creating request: ${error}`, {
+          variant: "error",
+        });
+        setIsLoading(false);
+        return;
+      }
+
       getAndSign(id);
     } catch (e) {
       console.log(e);
@@ -55,6 +88,7 @@ export default function Home() {
 
       if (error) {
         setError(`Error getting nonce: ${error}`);
+        enqueueSnackbar(`Error getting nonce: ${error}`, { variant: "error" });
         setIsLoading(false);
         return;
       }
@@ -72,7 +106,18 @@ export default function Home() {
       const { proof, error: error2 } = await response2.json();
 
       if (error2) {
+        if (error2 === "NO_MATCHING_PDAS") {
+          setError("No matching PDAs found for this request");
+          enqueueSnackbar("No matching PDAs found for this request", {
+            variant: "warning",
+          });
+          setIsLoading(false);
+          return;
+        }
         setError(`Error creating proof: ${error2}`);
+        enqueueSnackbar(`Error creating proof: ${error2}`, {
+          variant: "error",
+        });
         setIsLoading(false);
         return;
       }
@@ -86,50 +131,96 @@ export default function Home() {
   };
 
   return (
-    <Stack justifyContent="center" alignItems="center">
-      <Stack direction="row">
-        {isConnected ? (
-          <Button
-            variant="contained"
-            onClick={() => disconnect()}
-            sx={{
-              backgroundColor: "gray",
-              marginRight: "1rem",
-              ":hover": {
-                backgroundColor: "#000",
-              },
-            }}
-          >
-            Connected to {ensName || address}
-          </Button>
-        ) : (
-          <Button variant="contained" onClick={() => connect()}>
-            Connect
-          </Button>
-        )}
-        <Button
-          variant="contained"
-          onClick={() => createRequest()}
-          disabled={isLoading}
-        >
-          {isLoading ? "Loading..." : "Create Request"}
-        </Button>
+    <Stack justifyContent="center" alignItems="center" minHeight="100vh">
+      <Stack
+        alignSelf="flex-start"
+        sx={{
+          padding: "1rem",
+          backgroundColor: "#FFF",
+          width: "100%",
+          zIndex: 10,
+        }}
+      >
+        <Logo />
       </Stack>
-      {proof && (
-        <Stack>
-          <pre>{JSON.stringify(proof, null, 2)}</pre>
-        </Stack>
-      )}
-      {proof && !proof?.data?.PDAs?.length && (
-        <Stack>
-          <p>Requested PDAs not found, go to X link to get them</p>
-        </Stack>
-      )}
-      {error && (
-        <Stack>
-          <p>{error}</p>
-        </Stack>
-      )}
+      <Stack
+        alignItems="center"
+        justifyContent="space-around"
+        direction="row"
+        flex={1}
+        width="100%"
+      >
+        {/** Actions */}
+        <Card variant="outlined">
+          <CardHeader
+            title="Actions"
+            titleTypographyProps={{
+              variant: "subtitle1",
+              fontWeight: "bold",
+            }}
+          />
+          <CardContent>
+            <Stack>
+              <Typography fontWeight="bold">Your wallet:</Typography>
+              <Typography>
+                {isConnected ? ensName || address : "🛑 Not Connected"}
+              </Typography>
+            </Stack>
+            <Stack direction="row" marginTop={4}>
+              {isConnected ? (
+                <Button
+                  variant="contained"
+                  onClick={() => disconnect()}
+                  sx={{
+                    mr: 2,
+                  }}
+                >
+                  Disconnect
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={() => connect()}
+                  sx={{
+                    mr: 2,
+                  }}
+                >
+                  Connect
+                </Button>
+              )}
+              <Button
+                variant="contained"
+                onClick={() => createRequest()}
+                disabled={!isConnected || isLoading}
+              >
+                {isLoading ? "Loading..." : "Create Request"}
+              </Button>
+            </Stack>
+          </CardContent>
+        </Card>
+        {/** Proof */}
+        <Card variant="outlined">
+          <CardHeader
+            title="Proof Content"
+            titleTypographyProps={{
+              variant: "subtitle1",
+              fontWeight: "bold",
+            }}
+          />
+          <CardContent>
+            <pre>
+              {proof
+                ? JSON.stringify(proof, null, 2)
+                : "You haven't created a proof yet"}
+            </pre>
+            {proof && !proof?.data?.PDAs?.length && (
+              <Typography fontWeight="bold">
+                Requested PDAs not found, go to X link to get them
+              </Typography>
+            )}
+          </CardContent>
+        </Card>
+      </Stack>
     </Stack>
   );
 }
