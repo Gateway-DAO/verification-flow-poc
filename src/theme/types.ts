@@ -1,7 +1,6 @@
-import { SxProps } from '@mui/material';
-import { Breakpoint } from '@mui/system';
+import { Breakpoint, SxProps } from "@mui/material";
 
-import { GatewayTheme } from './theme';
+import { GatewayTheme } from "./theme";
 
 export interface ExtraPalette {}
 
