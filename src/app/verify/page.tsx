@@ -39,7 +39,7 @@ export default function Verify() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/create-request", {
+      const response = await fetch("/api/verify/create-request", {
         method: "POST",
         body: JSON.stringify({
           address,
@@ -78,7 +78,7 @@ export default function Verify() {
 
   const getAndSign = async (id: string) => {
     try {
-      const response = await fetch("/api/get-nonce", {
+      const response = await fetch("/api/verify/get-nonce", {
         method: "POST",
         body: JSON.stringify({
           id,
@@ -96,7 +96,7 @@ export default function Verify() {
 
       const signature = await signMessageAsync({ message });
 
-      const response2 = await fetch("/api/create-proof", {
+      const response2 = await fetch("/api/verify/create-proof", {
         method: "POST",
         body: JSON.stringify({
           id,
