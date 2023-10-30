@@ -1,6 +1,6 @@
-import Logo from "@/components/logo/logo";
 import { Stack } from "@mui/material";
 import Providers from "./providers";
+import Navbar from "./components/navbar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,17 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <Providers>
           <Stack minHeight="100vh">
-            <Stack
-              alignSelf="flex-start"
-              sx={{
-                padding: "1rem",
-                backgroundColor: "#FFF",
-                width: "100%",
-                zIndex: 10,
-              }}
-            >
-              <Logo />
-            </Stack>
+            <Navbar />
             {children}
           </Stack>
         </Providers>
