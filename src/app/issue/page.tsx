@@ -32,35 +32,36 @@ export default function Issue() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/create-request", {
+      const response = await fetch("/api/issue/issue-pda", {
         method: "POST",
         body: JSON.stringify({
+          title: "My PDA",
+          description: "This is my PDA",
           address,
+          claim: {
+            name: "John Doe",
+            email: "john@example.com",
+          },
+          image: "https://picsum.photos/200",
         }),
       });
 
-      const { id, error } = await response.json();
+      const { pda, error } = await response.json();
 
       if (error) {
-        if (
-          error === "Cannot convert object to primitive value" ||
-          error === `User ${address} not found`
-        ) {
-          setError("No matching PDAs found for this request");
-          enqueueSnackbar("No matching PDAs found for this request", {
-            variant: "warning",
-          });
-          setIsLoading(false);
-          return;
-        }
-
-        setError(`Error creating request: ${error}`);
-        enqueueSnackbar(`Error creating request: ${error}`, {
+        setError(`Error issuing PDA: ${error}`);
+        enqueueSnackbar(`Error issuing PDA: ${error}`, {
           variant: "error",
         });
         setIsLoading(false);
         return;
       }
+
+      setPDA(pda);
+      enqueueSnackbar(`PDA issued`, {
+        variant: "success",
+      });
+      setIsLoading(false);
     } catch (e) {
       console.log(e);
       setIsLoading(false);
@@ -138,11 +139,6 @@ export default function Issue() {
               ? JSON.stringify(PDA, null, 2)
               : "You haven't issued a PDA yet"}
           </pre>
-          {PDA && !PDA?.data?.dataAsset && (
-            <Typography fontWeight="bold">
-              Requested PDAs not found, go to X link to get them
-            </Typography>
-          )}
         </CardContent>
       </Card>
     </Stack>
