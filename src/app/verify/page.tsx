@@ -1,4 +1,5 @@
-import Logo from "@/components/logo/logo";
+"use client";
+
 import {
   Button,
   Card,
@@ -8,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   useAccount,
   useConnect,
@@ -18,7 +19,7 @@ import {
 } from "wagmi";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 
-export default function Home() {
+export default function Verify() {
   const { address, isConnected } = useAccount();
   const { data: ensName } = useEnsName({ address });
   const { connect } = useConnect({
@@ -131,96 +132,83 @@ export default function Home() {
   };
 
   return (
-    <Stack justifyContent="center" alignItems="center" minHeight="100vh">
-      <Stack
-        alignSelf="flex-start"
-        sx={{
-          padding: "1rem",
-          backgroundColor: "#FFF",
-          width: "100%",
-          zIndex: 10,
-        }}
-      >
-        <Logo />
-      </Stack>
-      <Stack
-        alignItems="center"
-        justifyContent="space-around"
-        direction="row"
-        flex={1}
-        width="100%"
-      >
-        {/** Actions */}
-        <Card variant="outlined">
-          <CardHeader
-            title="Actions"
-            titleTypographyProps={{
-              variant: "subtitle1",
-              fontWeight: "bold",
-            }}
-          />
-          <CardContent>
-            <Stack>
-              <Typography fontWeight="bold">Your wallet:</Typography>
-              <Typography>
-                {isConnected ? ensName || address : "🛑 Not Connected"}
-              </Typography>
-            </Stack>
-            <Stack direction="row" marginTop={4}>
-              {isConnected ? (
-                <Button
-                  variant="contained"
-                  onClick={() => disconnect()}
-                  sx={{
-                    mr: 2,
-                  }}
-                >
-                  Disconnect
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  onClick={() => connect()}
-                  sx={{
-                    mr: 2,
-                  }}
-                >
-                  Connect
-                </Button>
-              )}
+    <Stack
+      alignItems="center"
+      justifyContent="space-around"
+      direction="row"
+      flex={1}
+      width="100%"
+    >
+      {/** Actions */}
+      <Card variant="outlined">
+        <CardHeader
+          title="Actions"
+          titleTypographyProps={{
+            variant: "subtitle1",
+            fontWeight: "bold",
+          }}
+        />
+        <CardContent>
+          <Stack>
+            <Typography fontWeight="bold">Your wallet:</Typography>
+            <Typography>
+              {isConnected ? ensName || address : "🛑 Not Connected"}
+            </Typography>
+          </Stack>
+          <Stack direction="row" marginTop={4}>
+            {isConnected ? (
               <Button
                 variant="contained"
-                onClick={() => createRequest()}
-                disabled={!isConnected || isLoading}
+                onClick={() => disconnect()}
+                sx={{
+                  mr: 2,
+                }}
               >
-                {isLoading ? "Loading..." : "Create Request"}
+                Disconnect
               </Button>
-            </Stack>
-          </CardContent>
-        </Card>
-        {/** Proof */}
-        <Card variant="outlined">
-          <CardHeader
-            title="Proof Content"
-            titleTypographyProps={{
-              variant: "subtitle1",
-              fontWeight: "bold",
-            }}
-          />
-          <CardContent>
-            <pre>
-              {proof
-                ? JSON.stringify(proof, null, 2)
-                : "You haven't created a proof yet"}
-            </pre>
-            {proof && !proof?.data?.PDAs?.length && (
-              <Typography fontWeight="bold">
-                Requested PDAs not found, go to X link to get them
-              </Typography>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={() => connect()}
+                sx={{
+                  mr: 2,
+                }}
+              >
+                Connect
+              </Button>
             )}
-          </CardContent>
-        </Card>
-      </Stack>
+            <Button
+              variant="contained"
+              onClick={() => createRequest()}
+              disabled={!isConnected || isLoading}
+            >
+              {isLoading ? "Loading..." : "Create Request"}
+            </Button>
+          </Stack>
+        </CardContent>
+      </Card>
+      {/** Proof */}
+      <Card variant="outlined">
+        <CardHeader
+          title="Proof Content"
+          titleTypographyProps={{
+            variant: "subtitle1",
+            fontWeight: "bold",
+          }}
+        />
+        <CardContent>
+          <pre>
+            {proof
+              ? JSON.stringify(proof, null, 2)
+              : "You haven't created a proof yet"}
+          </pre>
+          {proof && !proof?.data?.PDAs?.length && (
+            <Typography fontWeight="bold">
+              Requested PDAs not found, go to X link to get them
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
     </Stack>
   );
 }

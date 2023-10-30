@@ -1,9 +1,11 @@
+"use client";
+
 import { ThemeProvider } from "@/theme";
-import type { AppProps } from "next/app";
 import { SnackbarProvider } from "notistack";
 
 import { WagmiConfig, configureChains, createConfig, mainnet } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
+import React from "react";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet],
@@ -16,13 +18,11 @@ const config = createConfig({
   webSocketPublicClient,
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiConfig config={config}>
       <ThemeProvider>
-        <SnackbarProvider>
-          <Component {...pageProps} />
-        </SnackbarProvider>
+        <SnackbarProvider>{children}</SnackbarProvider>
       </ThemeProvider>
     </WagmiConfig>
   );
