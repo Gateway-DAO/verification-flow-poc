@@ -1,13 +1,8 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function POST(req: Request) {
   const dataRequestTemplateId = process.env.TEMPLATE_ID;
   const orgGatewayId = process.env.ORG_GATEWAY_ID;
 
-  const { body } = req;
+  const body = await req.json();
 
   const data = {
     query: `
@@ -30,7 +25,7 @@ export default async function handler(
     }
     `,
     variables: {
-      wallet: JSON.parse(body).address,
+      wallet: body.address,
       dataRequestTemplateId,
       orgGatewayId,
     },
@@ -50,10 +45,10 @@ export default async function handler(
 
   if (returnData.errors) {
     console.log(JSON.stringify(returnData.errors, null, 4));
-    return res.status(500).json({ error: returnData.errors[0].message });
+    return Response.json({ error: returnData.errors[0].message });
   }
 
-  return res.json({
+  return Response.json({
     id: returnData.data?.createDataRequest?.id,
     arweaveUrl: returnData.data?.createDataRequest?.arweaveUrl,
   });

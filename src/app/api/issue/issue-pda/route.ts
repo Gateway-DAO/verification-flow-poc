@@ -1,14 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const { body } = req;
+export async function POST(req: Request) {
+  const body = await req.json();
 
   const data = {
     query: `
-    mutation createPDA($title: String!, $description: String!, $organization: String!, $owner: String!, $dataModelId: String!, $claim: String!, $image: String!) {
+    mutation createPDA($title: String!, $description: String!, $organization: String!, $owner: String!, $dataModelId: String!, $claim: JSON!, $image: String!) {
         createPDA(
             input: {
                 title: $title,
@@ -43,13 +38,13 @@ export default async function handler(
     }    
     `,
     variables: {
-      title: JSON.parse(body).title,
-      description: JSON.parse(body).description,
+      title: body.title,
+      description: body.description,
       organization: process.env.ORG_GATEWAY_ID,
-      owner: JSON.parse(body).address,
+      owner: body.address,
       dataModelId: process.env.DATA_MODEL_ID,
-      claim: JSON.parse(body).claim,
-      image: JSON.parse(body).image,
+      claim: body.claim,
+      image: body?.image,
     },
   };
 
@@ -67,10 +62,13 @@ export default async function handler(
 
   if (returnData.errors) {
     console.log(JSON.stringify(returnData.errors, null, 4));
-    return res.status(500).json({ error: returnData.errors[0].message });
+    return Response.json(
+      { error: returnData.errors[0].message },
+      { status: 500 }
+    );
   }
 
-  return res.json({
+  return Response.json({
     pda: returnData.data?.createPDA,
   });
 }

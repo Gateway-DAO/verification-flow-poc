@@ -1,10 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const { body } = req;
+export async function POST(req: Request) {
+  const body = await req.json();
 
   const data = {
     query: `
@@ -13,7 +8,7 @@ export default async function handler(
       }
     `,
     variables: {
-      requestId: JSON.parse(body).id,
+      requestId: body.id,
     },
   };
 
@@ -31,10 +26,13 @@ export default async function handler(
 
   if (returnData.errors) {
     console.log(JSON.stringify(returnData.errors, null, 4));
-    return res.status(500).json({ error: returnData.errors[0].message });
+    return Response.json(
+      { error: returnData.errors[0].message },
+      { status: 500 }
+    );
   }
 
-  return res.json({
+  return Response.json({
     message: returnData.data?.createProofMessage,
   });
 }

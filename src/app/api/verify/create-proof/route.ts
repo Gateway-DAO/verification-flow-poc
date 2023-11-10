@@ -1,10 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const { body } = req;
+export async function POST(req: Request) {
+  const body = await req.json();
 
   const data = {
     query: `
@@ -18,8 +13,8 @@ export default async function handler(
     }
     `,
     variables: {
-      requestId: JSON.parse(body).id,
-      signature: JSON.parse(body).signature,
+      requestId: body.id,
+      signature: body.signature,
     },
   };
 
@@ -37,7 +32,7 @@ export default async function handler(
 
   if (returnData.errors) {
     console.log(JSON.stringify(returnData.errors, null, 4));
-    return res.status(500).json({ error: returnData.errors[0].message });
+    return Response.json({ error: returnData.errors[0].message });
   }
 
   const proofId = returnData.data?.createProof.id;
@@ -102,10 +97,16 @@ export default async function handler(
 
   if (returnData2.errors) {
     console.log(JSON.stringify(returnData2.errors, null, 4));
-    return res.status(500).json({ error: returnData2.errors[0].message });
+    return Response.json(
+      { error: returnData2.errors[0].message },
+      { status: 500 }
+    );
   }
 
-  return res.json({
-    proof: returnData2.data?.proof,
-  });
+  return Response.json(
+    {
+      proof: returnData2.data?.proof,
+    },
+    { status: 200 }
+  );
 }
