@@ -39,8 +39,7 @@ export default function Issue() {
           description: "This is my PDA",
           address,
           claim: {
-            name: "John Doe",
-            email: "john@example.com",
+            city_names: ["New York", "London", "Tokyo"],
           },
           image: "https://picsum.photos/200",
         }),

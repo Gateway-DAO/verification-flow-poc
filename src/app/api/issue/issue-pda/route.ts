@@ -1,75 +1,34 @@
-export async function POST(req: Request) {
-  const body = await req.json();
+import { Gateway } from "@gateway-dao/sdk";
 
-  const data = {
-    query: `
-    mutation createPDA($title: String!, $description: String!, $organization: String!, $owner: String!, $dataModelId: String!, $claim: JSON!, $image: String!) {
-        createPDA(
-            input: {
-                title: $title,
-                description: $description,
-                owner: {
-                    type: EVM
-                    value: $owner
-                }
-                organization: {
-                	type: GATEWAY_ID
-                	value: $organization
-                }
-                dataModelId: $dataModelId
-                image: $image
-                expirationDate: null
-                claim: $claim
-            }
-        ) {
-            id
-            arweaveUrl
-            dataAsset {
-                owner {
-                    id
-                    gatewayId
-                }
-                issuer {
-                    id
-                    gatewayId
-                }
-            }
-        }
-    }    
-    `,
-    variables: {
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+
+    const gateway = new Gateway({
+      apiKey: process.env.API_KEY as string,
+      token: process.env.BEARER as string,
+      url: process.env.API_URL as string,
+    });
+
+    const data = await gateway.pda.createPDA({
       title: body.title,
       description: body.description,
-      organization: process.env.ORG_GATEWAY_ID,
+      organization: {
+        type: "GATEWAY_ID",
+        value: process.env.ORG_GATEWAY_ID as string,
+      },
       owner: body.address,
-      dataModelId: process.env.DATA_MODEL_ID,
+      dataModelId: process.env.DATA_MODEL_ID as string,
       claim: body.claim,
       image: body?.image,
-    },
-  };
+    });
 
-  const api = await fetch(process.env.API_URL as string, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": process.env.API_KEY as string,
-      Authorization: process.env.BEARER as string,
-    },
-    body: JSON.stringify(data),
-  });
+    return Response.json({
+      pda: data?.createPDA,
+    });
+  } catch (error) {
+    console.log(JSON.stringify(error, null, 4));
 
-  const returnData = await api.json();
-
-  if (returnData.errors) {
-    console.log(JSON.stringify(returnData.errors, null, 4));
-
-    return Response.json(
-      { error: returnData.errors[0].message },
-      { status: 500 }
-    );
+    return Response.json({ error }, { status: 500 });
   }
-
-  return Response.json({
-    pda: returnData.data?.createPDA,
-  });
 }
