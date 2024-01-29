@@ -1,38 +1,26 @@
+import { Gateway } from "@gateway-dao/sdk";
+
 export async function POST(req: Request) {
-  const body = await req.json();
+  try {
+    const body = await req.json();
 
-  const data = {
-    query: `
-    mutation($requestId: String!) {
-        createProofMessage(requestId: $requestId)
-      }
-    `,
-    variables: {
-      requestId: body.id,
-    },
-  };
+    const gateway = new Gateway({
+      apiKey: process.env.API_KEY as string,
+      token: process.env.BEARER as string,
+      url: process.env.API_URL as string,
+    });
 
-  const api = await fetch(process.env.API_URL as string, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": process.env.API_KEY as string,
-      Authorization: process.env.BEARER as string,
-    },
-    body: JSON.stringify(data),
-  });
+    const data = await gateway.proof.createProofMessage(body.id);
 
-  const returnData = await api.json();
+    return Response.json({
+      message: data?.createProofMessage,
+    });
+  } catch (error: any) {
+    console.log(JSON.stringify(error, null, 4));
 
-  if (returnData.errors) {
-    console.log(JSON.stringify(returnData.errors, null, 4));
     return Response.json(
-      { error: returnData.errors[0].message },
+      { message: error?.message || "Something went wrong" },
       { status: 500 }
     );
   }
-
-  return Response.json({
-    message: returnData.data?.createProofMessage,
-  });
 }

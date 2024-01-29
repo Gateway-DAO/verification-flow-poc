@@ -1,4 +1,4 @@
-import { Gateway } from "@gateway-dao/sdk";
+import { Gateway, UserIdentifierType } from "@gateway-dao/sdk";
 
 export async function POST(req: Request) {
   try {
@@ -9,7 +9,6 @@ export async function POST(req: Request) {
       token: process.env.BEARER as string,
       url: process.env.API_URL as string,
     });
-
     const data = await gateway.pda.createPDA({
       title: body.title,
       description: body.description,
@@ -17,7 +16,7 @@ export async function POST(req: Request) {
         type: "GATEWAY_ID",
         value: process.env.ORG_GATEWAY_ID as string,
       },
-      owner: body.address,
+      owner: { type: UserIdentifierType.EVM, value: body.address },
       dataModelId: process.env.DATA_MODEL_ID as string,
       claim: body.claim,
       image: body?.image,

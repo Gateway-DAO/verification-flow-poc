@@ -1,112 +1,36 @@
-export async function POST(req: Request) {
-  const body = await req.json();
+import { Gateway } from "@gateway-dao/sdk";
 
-  const data = {
-    query: `
-    mutation($requestId: String!, $signature: String!) {
-        createProof(
-            requestId: $requestId
-            signature: $signature
-        ) {
-            id
-        }
-    }
-    `,
-    variables: {
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+
+    const gateway = new Gateway({
+      apiKey: process.env.API_KEY as string,
+      token: process.env.BEARER as string,
+      url: process.env.API_URL as string,
+    });
+
+    const data = await gateway.proof.createProof({
       requestId: body.id,
       signature: body.signature,
-    },
-  };
+    });
 
-  const api = await fetch(process.env.API_URL as string, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": process.env.API_KEY as string,
-      Authorization: process.env.BEARER as string,
-    },
-    body: JSON.stringify(data),
-  });
+    const proofId = data?.createProof.id;
 
-  const returnData = await api.json();
+    const getProofData = await gateway.proof.getProof(proofId);
 
-  if (returnData.errors) {
-    console.log(JSON.stringify(returnData.errors, null, 4));
-    return Response.json({ error: returnData.errors[0].message });
-  }
-
-  const proofId = returnData.data?.createProof.id;
-
-  const data2 = {
-    query: `
-    query($id: String!) {
-        proof(
-            id: $id
-        ) {
-            totalCost
-            facilitationFee
-            arweaveUrl
-            status
-            data {
-                dataModels {
-                    id
-                    title
-                    consumptionPrice
-                }
-                PDAs {
-                    id
-                    claim
-                    title
-                    dataModel {
-                        id
-                    }
-                    issuer {
-                        id
-                        gatewayId
-                    }
-                    organization {
-                        id
-                        name
-                        gatewayId
-                        image
-                    }
-                    owner {
-                        id
-                    }
-                }
-            }
-        }
-    }
-    `,
-    variables: {
-      id: proofId,
-    },
-  };
-
-  const api2 = await fetch(process.env.API_URL as string, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": process.env.API_KEY as string,
-      Authorization: process.env.BEARER as string,
-    },
-    body: JSON.stringify(data2),
-  });
-
-  const returnData2 = await api2.json();
-
-  if (returnData2.errors) {
-    console.log(JSON.stringify(returnData2.errors, null, 4));
     return Response.json(
-      { error: returnData2.errors[0].message },
+      {
+        proof: getProofData.proof,
+      },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.log(JSON.stringify(error, null, 4));
+
+    return Response.json(
+      { message: error?.message || "Something went wrong" },
       { status: 500 }
     );
   }
-
-  return Response.json(
-    {
-      proof: returnData2.data?.proof,
-    },
-    { status: 200 }
-  );
 }
