@@ -17,10 +17,13 @@
     "@graphql-tools/url-loader": "^8.0.1",
     "@mui/material": "^5.15.6",
     "@whatwg-node/fetch": "^0.9.16",
+    "fast-json-stringify": "^5.10.0",
+    "long": "^5.2.3",
     "next": "13.5.4",
     "notistack": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "uglify-es": "^3.3.9",
     "viem": "^1.21.4",
     "wagmi": "^1.4.13"
   },

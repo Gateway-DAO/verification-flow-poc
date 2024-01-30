@@ -8,7 +8,6 @@ const nextConfig = {
       "@whatwg-node/fetch",
       "long",
       "uglify-es",
-      "uglify-es/package.json",
       "@graphql-mesh/utils",
       "@graphql-mesh/tools",
       "@graphql-tools/url-loader"
