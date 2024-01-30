@@ -15,6 +15,7 @@
     "@gateway-dao/sdk": "1.0.0-develop.4",
     "@graphql-mesh/utils": "^0.96.3",
     "@mui/material": "^5.15.6",
+    "@whatwg-node/fetch": "^0.9.16",
     "next": "13.5.4",
     "notistack": "^3.0.1",
     "react": "^18.2.0",
