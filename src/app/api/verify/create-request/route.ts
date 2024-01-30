@@ -33,6 +33,8 @@ export async function POST(req: Request) {
       arweaveUrl: data?.createDataRequest?.arweaveUrl,
     });
   } catch (error: any) {
+    console.log(error);
+
     console.log(JSON.stringify(error, null, 4));
 
     return Response.json(
