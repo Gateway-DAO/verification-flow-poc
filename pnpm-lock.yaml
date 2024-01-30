@@ -20,6 +20,9 @@ dependencies:
   '@graphql-mesh/utils':
     specifier: ^0.96.3
     version: 0.96.3(@graphql-mesh/cross-helpers@0.4.1)(@graphql-mesh/types@0.96.3)(@graphql-tools/utils@10.0.13)(graphql@16.8.1)(tslib@2.6.2)
+  '@graphql-tools/url-loader':
+    specifier: ^8.0.1
+    version: 8.0.1(@types/node@20.11.10)(graphql@16.8.1)
   '@mui/material':
     specifier: ^5.15.6
     version: 5.15.6(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)

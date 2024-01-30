@@ -14,6 +14,7 @@
     "@emotion/styled": "^11.11.0",
     "@gateway-dao/sdk": "1.0.0-develop.4",
     "@graphql-mesh/utils": "^0.96.3",
+    "@graphql-tools/url-loader": "^8.0.1",
     "@mui/material": "^5.15.6",
     "@whatwg-node/fetch": "^0.9.16",
     "next": "13.5.4",
