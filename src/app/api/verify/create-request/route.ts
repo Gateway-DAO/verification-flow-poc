@@ -7,7 +7,6 @@ import {
 export async function POST(req: Request) {
   try {
     const dataRequestTemplateId = process.env.TEMPLATE_ID!;
-    const orgGatewayId = process.env.ORG_GATEWAY_ID!;
 
     const body = await req.json();
 
@@ -22,10 +21,6 @@ export async function POST(req: Request) {
       owner: { type: UserIdentifierType.EVM, value: body.address },
       dataUse:
         "To ensure humanhood and offer personalized experiences based on how well-versed you are with crypto.",
-      organization: {
-        type: OrganizationIdentifierType.GATEWAY_ID,
-        value: orgGatewayId,
-      },
     });
 
     return Response.json({
