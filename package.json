@@ -13,6 +13,7 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@gateway-dao/sdk": "1.0.0-develop.8",
+    "@graphql-mesh/utils": "^0.96.3",
     "@mui/material": "^5.15.6",
     "@whatwg-node/fetch": "^0.9.16",
     "next": "13.5.4",
