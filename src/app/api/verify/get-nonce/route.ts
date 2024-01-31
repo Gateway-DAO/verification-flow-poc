@@ -16,7 +16,6 @@ export async function POST(req: Request) {
       message: data?.createProofMessage,
     });
   } catch (error: any) {
-    console.log(error);
     console.log(JSON.stringify(error, null, 4));
 
     return Response.json(
