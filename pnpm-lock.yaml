@@ -15,8 +15,8 @@ dependencies:
     specifier: ^11.11.0
     version: 11.11.0(@emotion/react@11.11.3)(@types/react@18.2.48)(react@18.2.0)
   '@gateway-dao/sdk':
-    specifier: 1.0.0-develop.10
-    version: 1.0.0-develop.10(@graphql-mesh/cross-helpers@0.4.1)(@graphql-mesh/store@0.95.8)(@graphql-mesh/types@0.95.8)(@graphql-tools/utils@10.0.13)(@types/node@20.11.10)(graphql-tag@2.12.6)(graphql-yoga@5.1.1)(react-dom@18.2.0)(react@18.2.0)(tslib@2.6.2)
+    specifier: 1.0.0-develop.11
+    version: 1.0.0-develop.11(@graphql-mesh/cross-helpers@0.4.1)(@graphql-mesh/store@0.95.8)(@graphql-mesh/types@0.95.8)(@graphql-tools/utils@10.0.13)(@types/node@20.11.10)(graphql-tag@2.12.6)(graphql-yoga@5.1.1)(react-dom@18.2.0)(react@18.2.0)(tslib@2.6.2)
   '@mui/material':
     specifier: ^5.15.6
     version: 5.15.6(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
@@ -1303,10 +1303,9 @@ packages:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
     dev: false
 
-  /@gateway-dao/sdk@1.0.0-develop.10(@graphql-mesh/cross-helpers@0.4.1)(@graphql-mesh/store@0.95.8)(@graphql-mesh/types@0.95.8)(@graphql-tools/utils@10.0.13)(@types/node@20.11.10)(graphql-tag@2.12.6)(graphql-yoga@5.1.1)(react-dom@18.2.0)(react@18.2.0)(tslib@2.6.2):
-    resolution: {integrity: sha512-cqDvfKVVUqJ8EHmwSWQgo3BZpX3WIytHZ5qoPvHhfQ39uGaXnoPRT8CZunjpYk+l75n7owIg+GMbBVtDc0k77g==}
+  /@gateway-dao/sdk@1.0.0-develop.11(@graphql-mesh/cross-helpers@0.4.1)(@graphql-mesh/store@0.95.8)(@graphql-mesh/types@0.95.8)(@graphql-tools/utils@10.0.13)(@types/node@20.11.10)(graphql-tag@2.12.6)(graphql-yoga@5.1.1)(react-dom@18.2.0)(react@18.2.0)(tslib@2.6.2):
+    resolution: {integrity: sha512-2j2lMh6VgwRDMICbkLcwWkwzQb/J+2ftiW7SRzTCoz+wiYqPWbkm3O9YKBPGsZj/u3eudhpUR2CSughH8GeHrw==}
     dependencies:
-      '@gateway-dao/sdk': 'link:'
       '@graphql-mesh/cli': 0.87.16(@types/node@20.11.10)(graphql-tag@2.12.6)(graphql-yoga@5.1.1)(graphql@16.8.1)
       '@graphql-mesh/graphql': 0.95.8(@graphql-mesh/cross-helpers@0.4.1)(@graphql-mesh/store@0.95.8)(@graphql-mesh/types@0.95.8)(@graphql-mesh/utils@0.96.3)(@graphql-tools/utils@10.0.13)(@types/node@20.11.10)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)(tslib@2.6.2)
       '@graphql-mesh/runtime': 0.96.13(@graphql-mesh/cross-helpers@0.4.1)(@graphql-mesh/types@0.95.8)(@graphql-mesh/utils@0.96.3)(@graphql-tools/utils@10.0.13)(graphql@16.8.1)(tslib@2.6.2)
