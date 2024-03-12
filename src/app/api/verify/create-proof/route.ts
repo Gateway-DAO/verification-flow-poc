@@ -14,6 +14,7 @@ export async function POST(req: Request) {
       requestId: body.id,
       signature: body.signature,
     });
+    console.log("proof ", data.createProof);
 
     const proofId = data?.createProof.id;
 
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
       { status: 200 }
     );
   } catch (error: any) {
+    console.log("proof error", error);
     console.log(JSON.stringify(error, null, 4));
 
     return Response.json(

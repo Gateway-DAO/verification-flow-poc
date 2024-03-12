@@ -1,8 +1,4 @@
-import {
-  Gateway,
-  OrganizationIdentifierType,
-  UserIdentifierType,
-} from "@gateway-dao/sdk";
+import { Gateway, UserIdentifierType } from "@gateway-dao/sdk";
 
 export async function POST(req: Request) {
   try {
@@ -22,7 +18,7 @@ export async function POST(req: Request) {
       dataUse:
         "To ensure humanhood and offer personalized experiences based on how well-versed you are with crypto.",
     });
-
+    
     return Response.json({
       id: data?.createDataRequest?.id,
       arweaveUrl: data?.createDataRequest?.arweaveUrl,

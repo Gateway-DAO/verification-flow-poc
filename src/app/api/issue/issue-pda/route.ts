@@ -26,6 +26,7 @@ export async function POST(req: Request) {
       pda: data?.createPDA,
     });
   } catch (error) {
+    console.log(error)
     console.log(JSON.stringify(error, null, 4));
 
     return Response.json({ error }, { status: 500 });
